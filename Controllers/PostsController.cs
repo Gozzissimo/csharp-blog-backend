@@ -30,10 +30,13 @@ namespace csharp_blog_backend.Controllers
             {
                 return NotFound();
             }
+
             if (stringa != null) { return await _context.posts.Where(m => m.Title.Contains(stringa) || m.Description.Contains(stringa)).ToListAsync(); }
 
             else { return await _context.posts.ToListAsync(); }
         }
+
+
 
 
         // GET: api/Posts/5
@@ -59,7 +62,6 @@ namespace csharp_blog_backend.Controllers
 
 
         // PUT: api/Posts/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPost(int id, Post post)
@@ -122,10 +124,6 @@ namespace csharp_blog_backend.Controllers
                 post.File.CopyTo(stream);
             }
 
-
-            post.Image = "https://localhost:5000/Files/" + fileName;
-
-
             // salviamo anche il file come  varBinaryMAx nel DB
             //in questa parte c'è il salvataggio a db per un file blog
 
@@ -139,7 +137,7 @@ namespace csharp_blog_backend.Controllers
                 post.ImageBytes = br.ReadBytes((int)post.File.OpenReadStream().Length);
             }
 
-
+            post.Image = "https://localhost:5000/Files/" + fileName;
 
             _context.posts.Add(post);
             await _context.SaveChangesAsync();
